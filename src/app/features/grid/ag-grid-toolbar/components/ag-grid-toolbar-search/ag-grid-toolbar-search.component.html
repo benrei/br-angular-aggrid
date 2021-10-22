@@ -1,0 +1,14 @@
+<input
+  #seachInput
+  placeholder="{{ 'Search...' }}"
+  type="search"
+  (keyup)="onSearch($event)"
+  (search)="onSearch($event)"
+/>
+<button
+  mat-raised-button
+  *ngIf="clearFilterBtnVisible"
+  (click)="clearFilters()"
+>
+  ClearAllFilters
+</button>

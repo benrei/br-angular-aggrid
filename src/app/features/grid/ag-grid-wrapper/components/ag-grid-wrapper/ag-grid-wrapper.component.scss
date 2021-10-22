@@ -1,0 +1,16 @@
+.grid-wrapper {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+.grid-actions {
+  display: flex;
+  padding: 4px;
+}
+::ng-deep .grid-actions > * {
+  margin-right: 20px;
+}
+::ng-deep ag-grid-angular {
+  width: 100%;
+  height: 100%;
+}

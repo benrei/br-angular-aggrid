@@ -1,0 +1,22 @@
+<div>
+  <input
+  #input
+  #trigger="matAutocompleteTrigger"
+  [formControl]="control"
+  [matTooltip]="tooltip"
+  [matAutocomplete]="autocomplete"
+  [placeholder]="placeholder"
+  [style.background]="control.errors ? '#f3c8c7' : 'none'"
+  (keyup)="onKeyup($event, trigger)"
+  (blur)="onBlur()"
+/>
+  <button tabindex="-1" (click)="onBtnClick($event, trigger)">Søk</button>
+  <mat-autocomplete #autocomplete="matAutocomplete" showPanel="false" isOpen="false" panelOpen="false"
+    [autoActiveFirstOption]="autoActiveFirstOption()" [displayWith]="displayWith"
+    [isScrollEnd]="lastRow > 0 || params.type !== 'datasource'" (infiniteScroll)="onScroll()"
+    (optionSelected)="onOptionSelected()">
+    <mat-option *ngFor="let item of filteredItems$ | async" [value]="item">
+      <span [innerHTML]="getOptionLabel(item)"></span>
+    </mat-option>
+  </mat-autocomplete>
+</div>

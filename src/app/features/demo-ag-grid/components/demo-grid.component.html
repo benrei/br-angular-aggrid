@@ -1,0 +1,20 @@
+<app-ag-grid-wrapper [hasExternalAddButton]="false">
+  <div wrapperAction>Action1</div>
+  <div wrapperAction>Action2</div>
+  <app-ag-grid-wrapper-toolbar [agGrid]="agGrid"></app-ag-grid-wrapper-toolbar>
+  <app-ag-grid-filter-panel
+    [agGrid]="agGrid"
+    [filters]="filters"
+  ></app-ag-grid-filter-panel>
+  <ag-grid-angular
+    #agGrid
+    id="demo-grid"
+    class="ag-theme-orange"
+    createRow
+    rowEditing
+    [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions"
+    [rowData]="rowData"
+    (rowSelected)="rowSelected($event)"
+  ></ag-grid-angular>
+</app-ag-grid-wrapper>

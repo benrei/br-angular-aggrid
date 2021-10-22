@@ -1,0 +1,9 @@
+<mat-button-toggle-group [value]="selectedFilterItem" *ngIf="filters">
+  <mat-button-toggle
+    *ngFor="let filter of filters"
+    [value]="filter"
+    (click)="setFilter(filter)"
+  >
+    {{ filter?.title }}
+  </mat-button-toggle>
+</mat-button-toggle-group>

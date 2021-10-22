@@ -1,0 +1,14 @@
+@import '../../../../../../../src/assets/scss/app.palettes.scss';
+mat-toolbar {
+  height: 48px;
+  border: 1px solid #bdc3c7;
+  border-bottom: none;
+  background: #f5f7f7 !important;
+}
+.spacer {
+  flex: 1 1 auto;
+}
+:host ::ng-deep mat-icon {
+  // color: map-get($primary-palette-colors, 500);
+  // fill: map-get($primary-palette-colors, 500);
+}

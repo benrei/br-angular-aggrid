@@ -1,0 +1,14 @@
+<div class="grid-wrapper">
+  <div class="grid-actions">
+    <app-add-button
+      *ngIf="hasExternalAddButton"
+      [addFn]="addFn"
+    ></app-add-button>
+    <ng-content select="[wrapperAction]"></ng-content>
+  </div>
+  <ng-content>
+    <!-- ag-grid-toolbar -->
+    <!-- ag-grid-filter-panel -->
+    <!-- ag-grid-angular -->
+  </ng-content>
+</div>

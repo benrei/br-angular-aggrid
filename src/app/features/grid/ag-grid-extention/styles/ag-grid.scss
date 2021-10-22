@@ -1,0 +1,43 @@
+@import '../../../../../assets/scss/app.palettes.scss';
+@import 'ag-grid-community/dist/styles/ag-grid.scss';
+@import 'ag-grid-community/dist/styles/ag-theme-balham/sass/ag-theme-balham-mixin.scss';
+
+.ag-theme-orange {
+  // See full parameter list: https://www.ag-grid.com/angular-data-grid/themes-customising/#full-list-of-theme-parameters
+  @include ag-theme-balham(
+    (
+      odd-row-background-color: map-get($grey-palette-colors, 50),
+      row-border-color: $ag-grid-border-color,
+      range-selection-border-color: map-get($secondary-palette-colors, 400),
+      selected-row-background-color: map-get($secondary-palette-colors, 100),
+      range-selection-background-color:
+        rgba(map-get($secondary-palette-colors, 100), 0.25),
+      value-change-value-highlight-background-color:
+        map-get($success-palette-colors, 100),
+      input-focus-border-color: map-get($secondary-palette-colors, 400),
+      font-size: 12px,
+    )
+  );
+  .ag-cell-inline-editing input {
+    border: none;
+    font-size: 12px;
+  }
+}
+
+/* Scroll bar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(map-get($secondary-palette-colors, 500), 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: map-get($secondary-palette-colors, 500);
+}
+* {
+  scrollbar-color: map-get($secondary-palette-colors, 500)
+    rgba(map-get($secondary-palette-colors, 500), 0.2);
+  scrollbar-width: thin;
+}
+/* Scroll bar END */
