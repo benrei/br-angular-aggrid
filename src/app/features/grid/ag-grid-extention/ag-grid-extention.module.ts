@@ -4,16 +4,18 @@ import { AgGridModule } from 'ag-grid-angular';
 import { AgGridDirectivesModule } from './directives/ag-grid-directives.module';
 import 'ag-grid-enterprise';
 import { ComponentsModule } from './components/components.module';
+import { DatasourceCwService } from './services/datasource-cw.service';
 
 @NgModule({
   imports: [
     AgGridModule.withComponents([]),
     AgGridDirectivesModule,
     ComponentsModule,
-    CommonModule
+    CommonModule,
   ],
   declarations: [],
-  exports: [AgGridDirectivesModule, AgGridModule]
+  exports: [AgGridDirectivesModule, AgGridModule],
+  providers: [DatasourceCwService],
 })
 /** AgGrid extentions
  * Components: cell-editors, cell-render, column-types, status-bars

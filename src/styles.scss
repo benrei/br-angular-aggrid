@@ -1,5 +1,8 @@
 /* Add application styles & imports to this file! */
-@import 'assets/scss/app.palettes.scss';
-@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import "assets/scss/app.palettes.scss";
+@import "@angular/material/prebuilt-themes/indigo-pink.css";
 
-@import 'app/features/grid/ag-grid-extention/styles/ag-grid.scss';
+@import "app/features/grid/ag-grid-extention/styles/ag-grid.scss";
+body {
+  margin: 0;
+}

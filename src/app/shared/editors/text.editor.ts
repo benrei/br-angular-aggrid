@@ -1,6 +1,6 @@
 import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { EditorBase } from './editor.base';
+import { EditorBase, IEditorBase } from './editor.base';
 
 @Component({
   selector: 'app-text-editor',
@@ -14,7 +14,9 @@ import { EditorBase } from './editor.base';
       [style.background]="control.errors ? '#f3c8c7' : 'none'"
     />
   `,
-  styles: ['input {height: 100%; width:100%; padding: 0 11px; box-sizing: border-box;}'],
+  styles: [
+    'input {height: 100%; width:100%; padding: 0 11px; box-sizing: border-box;}',
+  ],
 })
 export class TextEditor extends EditorBase {
   @Input() control: FormControl;
@@ -26,4 +28,4 @@ export class TextEditor extends EditorBase {
   }
 }
 
-export interface TextEditorParams extends EditorBase {}
+export interface TextEditorParams extends IEditorBase {}

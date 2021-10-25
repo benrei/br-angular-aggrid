@@ -1,4 +1,3 @@
-import { AgGridAngular } from 'ag-grid-angular';
 import { RowNode } from 'ag-grid-community';
 import { Component, Input, HostBinding, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -20,17 +19,18 @@ import { AgGridToolbarComponent } from '../ag-grid-toolbar/ag-grid-toolbar.compo
 })
 export class EditAction implements OnInit {
   @Input() editFn;
-  @Input() agGrid: AgGridAngular;
-  constructor(public toolbar: AgGridToolbarComponent,
+  constructor(
+    public toolbar: AgGridToolbarComponent,
     public dialog: MatDialog,
-    private _snackBar: MatSnackBar) {}
+    private _snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.editFn = this.editFn || this.defaultEditFn
+    this.editFn = this.editFn || this.defaultEditFn;
   }
-  
+
   @HostBinding('class.disabled') get isDisabled() {
-    const rowNode = this.agGrid.api?.getSelectedNodes()?.[0];
+    const rowNode = this.toolbar.gridApi?.getSelectedNodes()?.[0];
     return !rowNode?.displayed;
   }
 
@@ -39,5 +39,4 @@ export class EditAction implements OnInit {
     const text = JSON.stringify(rowNode.data, undefined, 4);
     this.dialog.open(ToolbarDialogComponent, { data: { text } });
   };
-
 }

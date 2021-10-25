@@ -1,11 +1,14 @@
 .grid-wrapper {
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   height: 100%;
 }
 .grid-actions {
   display: flex;
   padding: 4px;
+  &:empty {
+    display: none;
+  }
 }
 ::ng-deep .grid-actions > * {
   margin-right: 20px;

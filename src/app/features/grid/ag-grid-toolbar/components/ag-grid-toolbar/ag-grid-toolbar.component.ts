@@ -1,10 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import {
-  ColumnApi,
-  GridApi,
-  GridReadyEvent,
-  RowSelectedEvent,
-} from 'ag-grid-community';
+import { Component, OnInit, Input, AfterContentInit } from '@angular/core';
+import { ColumnApi, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridAngular } from 'ag-grid-angular';
 import { take } from 'rxjs/operators';
 import { AgGridContext } from '../../../interfaces/ag-grid-context';
@@ -14,13 +9,11 @@ import { AgGridContext } from '../../../interfaces/ag-grid-context';
   templateUrl: './ag-grid-toolbar.component.html',
   styleUrls: ['./ag-grid-toolbar.component.scss'],
 })
-export class AgGridToolbarComponent implements OnInit {
+export class AgGridToolbarComponent implements AfterContentInit, OnInit {
+  @Input() agGrid: AgGridAngular;
   gridApi: GridApi;
   columnApi: ColumnApi;
   context: AgGridContext;
-  @Input() agGrid: AgGridAngular;
-  @Input() showDefaultActions = true;
-  rowSelectedParams: RowSelectedEvent;
 
   constructor() {}
 

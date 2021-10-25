@@ -6,10 +6,18 @@ import { CellEditorBase } from './cell-editors.base';
 
 @Component({
   selector: 'app-cell-editor-date',
-  template: ` <app-date-editor [control]="formControl" [params]="params"></app-date-editor> `,
+  template: `
+    <app-date-editor
+      [control]="formControl"
+      [params]="params"
+    ></app-date-editor>
+  `,
   styles: [],
 })
-export class DateCellEditor extends CellEditorBase implements AgEditorComponent, AfterViewInit {
+export class DateCellEditor
+  extends CellEditorBase
+  implements AgEditorComponent, AfterViewInit
+{
   @ViewChild(DateEditor) editor: DateEditor;
   constructor() {
     super();
@@ -32,6 +40,8 @@ export class DateCellEditor extends CellEditorBase implements AgEditorComponent,
   }
 
   getValue = () => {
-    return this.params.value !== this.formControl.value ? this.formControl.value : this.params.value;
+    return this.params.value !== this.formControl.value
+      ? this.formControl.value
+      : this.params.value;
   };
 }

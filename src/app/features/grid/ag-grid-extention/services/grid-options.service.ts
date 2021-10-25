@@ -1,11 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GridOptions, NavigateToNextCellParams } from 'ag-grid-community';
-import {
-  CellFocusedEvent,
-  CellPosition,
-  ColumnApi,
-  GridApi,
-} from 'ag-grid-community/dist/lib/main';
+import { CellPosition, ColumnApi, GridApi } from 'ag-grid-community';
 import { EntitySchema } from '../../../../core/interfaces/entity-schema';
 import { Keyboard } from '../enums/keyboard.enum';
 import { ColumnTypesService } from './column-types.service';
@@ -30,9 +25,6 @@ export class GridOptionsService {
       enableRangeSelection: true,
       frameworkComponents: {},
       navigateToNextCell: this.navigateToNextCell,
-      onCellFocused: ({ api, rowIndex, rowPinned }: CellFocusedEvent) => {
-        if (!rowPinned) api.getDisplayedRowAtIndex(rowIndex).setSelected(true);
-      },
       onGridReady: ({ api, columnApi }) => {
         this.api = api;
         this.columnApi = columnApi;

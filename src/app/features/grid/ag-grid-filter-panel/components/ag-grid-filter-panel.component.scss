@@ -1,12 +1,11 @@
-@import '../../../../../../src/assets/scss/app.palettes.scss';
-
-:host ::ng-deep mat-button-toggle-group {
-  background: $ag-grid-header-color;
+@import "../../../../../../src/assets/scss/app.palettes.scss";
+:host {
+  display: flex;
   border: 1px solid $ag-grid-outer-border-color;
   border-bottom: none;
+}
+::ng-deep mat-button-toggle-group {
   border-radius: 0;
-  width: calc(100% - 2px); // TODO: look into this..
-
   .mat-button-toggle {
     &:not(:last-child) {
       border-right: 1px solid $white-color;

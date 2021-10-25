@@ -3,9 +3,7 @@ import { AfterViewInit, Directive, OnInit } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, ColGroupDef } from 'ag-grid-community';
 
-@Directive({
-  selector: 'ag-grid-angular[translate]',
-})
+@Directive({ selector: 'ag-grid-angular[translate]' })
 export class AgGridTranslationDirective implements OnInit, AfterViewInit {
   constructor(private agGrid: AgGridAngular, private snackBar: MatSnackBar) {}
   ngOnInit(): void {

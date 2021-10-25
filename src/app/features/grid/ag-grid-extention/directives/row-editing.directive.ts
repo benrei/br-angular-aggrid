@@ -2,20 +2,21 @@ import { Directive, HostListener, OnInit, AfterViewInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
-  RowEditingStartedEvent,
+  CellValueChangedEvent,
+  Column,
   RowEditingStoppedEvent,
+  RowValueChangedEvent,
 } from 'ag-grid-community';
-import FormUtils from '../../../../core/utils/form.utils';
 import { AgGridContext } from '../../interfaces/ag-grid-context';
 import { CREATE_ROW } from '../constants';
 import { AgGridUtils } from '../utils/ag-grid.utils';
 
-/** Enables create/update rows in ag-grid */
-@Directive({
-  selector: 'ag-grid-angular[rowEditing]',
-})
+/** Enables row editing in grid */
+@Directive({ selector: 'ag-grid-angular[rowEditing]' })
 export class RowEditingDirective implements OnInit, AfterViewInit {
   context: AgGridContext;
+  /** List of actual dirty columns/cells after edit */
+  dirtyColumns: Column[] = [];
 
   constructor(private agGrid: AgGridAngular, private snackBar: MatSnackBar) {}
 
@@ -23,9 +24,6 @@ export class RowEditingDirective implements OnInit, AfterViewInit {
     const { editType, gridOptions } = this.agGrid;
     if (!editType || !gridOptions.editType) {
       this.agGrid.editType = 'fullRow';
-    }
-    if (!this.agGrid.context || !gridOptions.context) {
-      this.agGrid.context = {};
     }
     this.context = this.agGrid.context || gridOptions.context;
   }
@@ -39,24 +37,30 @@ export class RowEditingDirective implements OnInit, AfterViewInit {
     this.context.formGroup = AgGridUtils.createFormGroup(colDefs);
   }
 
-  @HostListener('rowEditingStarted', ['$event'])
-  async rowEditingStarted(event: RowEditingStartedEvent) {
-    const { formGroup } = event.context as AgGridContext;
+  @HostListener('cellValueChanged', ['$event'])
+  rowEditingStarted(event: CellValueChangedEvent) {
+    this.dirtyColumns.push(event.column);
   }
 
-  @HostListener('rowEditingStopped', ['$event'])
-  rowEditingEnded(event: RowEditingStoppedEvent) {
-    const { api, columnApi, context, data, node } = event;
-    const { formGroup } = context as AgGridContext;
-    if (formGroup.dirty && node.id !== CREATE_ROW) {
+  @HostListener('rowValueChanged', ['$event'])
+  rowValueChanged(event: RowValueChangedEvent) {
+    console.log('rowValueChanged');
+    const { api, context, node } = event;
+    if (node.id === CREATE_ROW) return;
+    if (this.dirtyColumns.length > 0) {
+      const { formGroup } = context as AgGridContext;
       // TODO: save changes to backend...
       this.snackBar.open('TODO: save changes to backend...');
       // Flash dirty cells
-      const dirtyCols = FormUtils.getDirtyValues(formGroup);
-      const dirtyColKeys = Object.keys(dirtyCols);
-      api.flashCells({ rowNodes: [node], columns: dirtyColKeys });
-      formGroup.reset();
-      formGroup.enable();
+      api.flashCells({ rowNodes: [node], columns: this.dirtyColumns });
     }
+  }
+
+  @HostListener('rowEditingStopped', ['$event'])
+  rowEditingStopped({ context }: RowEditingStoppedEvent) {
+    const { formGroup } = context as AgGridContext;
+    formGroup.reset();
+    formGroup.enable();
+    this.dirtyColumns = [];
   }
 }

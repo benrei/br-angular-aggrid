@@ -1,3 +1,4 @@
+import { AgGridServerSideRoutes } from './../../../pages/ag-grid-server-side/ag-grid-server-side.routes';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainLayoutComponent } from './main-layout.component';
@@ -17,9 +18,10 @@ const routes: Routes = [
       { path: '', redirectTo: '/home', pathMatch: 'full' },
       ...HomeRoutes,
       ...OtherRoutes,
-      ...AgGridRoutes
-    ]
-  }
+      ...AgGridRoutes,
+      ...AgGridServerSideRoutes,
+    ],
+  },
 ];
 
 @NgModule({
@@ -28,8 +30,8 @@ const routes: Routes = [
     MatSidenavModule,
     MenuModule,
     RouterModule.forChild(routes),
-    ToolbarModule
+    ToolbarModule,
   ],
-  declarations: [MainLayoutComponent]
+  declarations: [MainLayoutComponent],
 })
 export class MainLayoutModule {}

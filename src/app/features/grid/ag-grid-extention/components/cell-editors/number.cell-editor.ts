@@ -6,10 +6,18 @@ import { CellEditorBase } from './cell-editors.base';
 
 @Component({
   selector: 'app-cell-editor-number',
-  template: ` <app-number-editor [control]="formControl" [params]="params"></app-number-editor> `,
+  template: `
+    <app-number-editor
+      [control]="formControl"
+      [params]="params"
+    ></app-number-editor>
+  `,
   styles: [],
 })
-export class NumberCellEditor extends CellEditorBase implements AgEditorComponent, AfterViewInit {
+export class NumberCellEditor
+  extends CellEditorBase
+  implements AgEditorComponent, AfterViewInit
+{
   @ViewChild(NumberEditor) editor: NumberEditor;
   constructor() {
     super();

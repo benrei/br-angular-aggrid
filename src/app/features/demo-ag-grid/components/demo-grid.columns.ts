@@ -1,9 +1,10 @@
+import { NumberEditorParams } from './../../../shared/editors/number.editor';
 import { AgGridLookupEditorParams } from './../../../shared/editors/ag-grid-lookup/ag-grid-lookup.models';
 import { Injectable } from '@angular/core';
 import { ColDef } from 'ag-grid-community';
 import { AgGridLookupCellEditor } from '../../grid/ag-grid-extention/components/cell-editors/ag-grid-lookup.cell-editor';
 import { ColumnType } from '../../grid/ag-grid-extention/enums/column-type.enum';
-import rowData from './rowData';
+import { Validators } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class DemoGridColumns {
@@ -40,6 +41,9 @@ export class DemoGridColumns {
       {
         field: 'price',
         type: ColumnType.NumberDecimal,
+        cellEditorParams: {
+          validators: [Validators.required],
+        } as NumberEditorParams,
       },
       {
         field: 'damaged',

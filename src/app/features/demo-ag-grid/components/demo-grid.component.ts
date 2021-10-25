@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ColDef, GridOptions } from 'ag-grid-community';
+import { ColDef, GridOptions, GridReadyEvent } from 'ag-grid-community';
 import { GridOptionsService } from '../../grid/ag-grid-extention/services/grid-options.service';
-import { AgGridContext } from '../../grid/interfaces/ag-grid-context';
 import { DemoGridColumns } from './demo-grid.columns';
 import filters from './filters';
 import rowData from './rowData';
@@ -38,5 +37,20 @@ export class DemoGridComponent implements OnInit {
     this.gridOptions = {
       ...this.gridOptionsService.core(this.entitySchema),
     };
+    this.gridOptions.context.suppressKey = {
+      Escape: (params) => {
+        return true;
+      },
+    };
+  }
+  onGridReady({ api }: GridReadyEvent) {
+    // setTimeout(() => {
+    //   this.rowData = [this.rowData[0], ...this.rowData];
+    //   api.setRowData(this.rowData);
+    // }, 2000);
+    // setTimeout(() => {
+    //   this.rowData = [this.rowData[0], ...this.rowData];
+    //   api.setRowData(this.rowData);
+    // }, 4000);
   }
 }

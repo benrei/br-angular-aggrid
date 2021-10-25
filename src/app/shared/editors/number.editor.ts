@@ -1,4 +1,4 @@
-import { EditorBase } from './editor.base';
+import { EditorBase, IEditorBase } from './editor.base';
 import { Component, Input, ViewChild, ViewContainerRef } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
@@ -30,7 +30,7 @@ export class NumberEditor extends EditorBase {
   }
 }
 
-export interface NumberEditorParams extends EditorBase {
+export interface NumberEditorParams extends IEditorBase {
   /** See more: https://imask.js.org/guide.html */
   mask?: object | any;
 }

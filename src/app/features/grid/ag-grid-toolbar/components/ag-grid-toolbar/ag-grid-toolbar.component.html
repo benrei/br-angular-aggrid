@@ -3,18 +3,5 @@
   <span class="spacer"></span>
   <ng-content select="[preAction]"></ng-content>
   <ng-content></ng-content>
-  <div *ngIf="showDefaultActions">
-    <app-add-action
-      *ngIf="!context.hasExternalAddButton"
-      [agGrid]="agGrid"
-    ></app-add-action>
-    <app-edit-action [agGrid]="agGrid"></app-edit-action>
-    <app-delete-action [agGrid]="agGrid"></app-delete-action>
-    <app-reload-action [agGrid]="agGrid"></app-reload-action>
-    <app-fit-columns-action [agGrid]="agGrid"></app-fit-columns-action>
-    <app-reset-columns-action [agGrid]="agGrid"></app-reset-columns-action>
-    <app-undo-action [agGrid]="agGrid"></app-undo-action>
-    <app-redo-action [agGrid]="agGrid"></app-redo-action>
-  </div>
   <ng-content select="[postAction]"></ng-content>
 </mat-toolbar>

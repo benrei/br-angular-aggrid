@@ -20,5 +20,6 @@ export class CellEditorBase implements AgEditorComponent {
   }
 
   getValue = () => this.formControl.value;
-  isCancelAfterEnd = () => !!this.formControl.errors;
+  isCancelAfterEnd = () =>
+    !!this.formControl.errors || this.params.value === this.formControl.value;
 }

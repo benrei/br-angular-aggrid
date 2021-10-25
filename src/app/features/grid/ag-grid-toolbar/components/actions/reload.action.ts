@@ -1,5 +1,5 @@
-import { AgGridAngular } from 'ag-grid-angular';
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { AgGridToolbarComponent } from '../ag-grid-toolbar/ag-grid-toolbar.component';
 
 @Component({
   selector: 'app-reload-action',
@@ -7,14 +7,16 @@ import { Component, Input } from '@angular/core';
     <button mat-icon-button (click)="onClick()">
       <mat-icon matTooltip="Reload data">refresh</mat-icon>
     </button>
-  `
+  `,
 })
 export class ReloadAction {
-  @Input() agGrid: AgGridAngular;
+  @Output() reload = new EventEmitter<void>();
+  constructor(private toolBar: AgGridToolbarComponent) {}
   onClick() {
-    const type = this.agGrid.api.getModel().getType();
+    const type = this.toolBar.agGrid.api.getModel().getType();
     if (type === 'serverSide') {
-      this.agGrid.api.refreshServerSideStore({ purge: false });
+      this.toolBar.agGrid.api.refreshServerSideStore({ purge: false });
     }
+    this.reload.emit();
   }
 }

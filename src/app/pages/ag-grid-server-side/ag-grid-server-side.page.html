@@ -1,0 +1,30 @@
+<app-ag-grid-wrapper>
+  <div wrapperAction>Action1</div>
+  <div wrapperAction>Action2</div>
+  <app-ag-grid-wrapper-toolbar [agGrid]="agGrid">
+    <app-add-action></app-add-action>
+    <app-edit-action></app-edit-action>
+    <app-delete-action></app-delete-action>
+    <app-reload-action></app-reload-action>
+    <app-fit-columns-action></app-fit-columns-action>
+    <app-reset-columns-action></app-reset-columns-action>
+    <app-undo-action></app-undo-action>
+    <app-redo-action></app-redo-action>
+  </app-ag-grid-wrapper-toolbar>
+  <app-ag-grid-filter-panel
+    [agGrid]="agGrid"
+    [filters]="filters"
+  ></app-ag-grid-filter-panel>
+  <ag-grid-angular
+    #agGrid
+    id="demo-grid"
+    class="ag-theme-orange"
+    eventSelection
+    routeHandler
+    rowEditing
+    [columnDefs]="columnDefs"
+    [gridOptions]="gridOptions"
+    (gridReady)="onGridReady($event)"
+    (rowSelected)="rowSelected($event)"
+  ></ag-grid-angular>
+</app-ag-grid-wrapper>

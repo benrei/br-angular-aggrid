@@ -9,6 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
   imports: [CommonModule, MatDialogModule, MatListModule, RouterModule],
   declarations: [AddTokenComponent, MenuComponent],
-  exports: [AddTokenComponent, MenuComponent]
+  exports: [AddTokenComponent, MenuComponent],
+  entryComponents: [AddTokenComponent],
 })
 export class MenuModule {}

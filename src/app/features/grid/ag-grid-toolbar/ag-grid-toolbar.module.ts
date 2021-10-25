@@ -21,14 +21,14 @@ import { AgGridToolbarSearchComponent } from './components/ag-grid-toolbar-searc
     MatDialogModule,
     MatSnackBarModule,
     MatToolbarModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   declarations: [
     AgGridToolbarComponent,
     ToolbarDialogComponent,
-    AgGridToolbarSearchComponent
+    AgGridToolbarSearchComponent,
   ],
-  exports: [AgGridToolbarComponent, ToolbarDialogComponent],
-  entryComponents: [ToolbarDialogComponent]
+  exports: [ActionsModule, AgGridToolbarComponent, ToolbarDialogComponent],
+  entryComponents: [ToolbarDialogComponent],
 })
 export class AgGridToolbarModule {}

@@ -1,12 +1,36 @@
+import { EntitySchema } from './../../../core/interfaces/entity-schema';
 import { FormGroup } from '@angular/forms';
-// import { EntitySchema } from '@core/models/data-schema.model';
+import { SuppressKeyboardEventParams } from 'ag-grid-community';
 
 export interface AgGridContext {
   //datasource?: DatasourceCwService;
   // datasource?: DatasourceScService;
-  // entitySchema?: EntitySchema;
-  /** Holds data in cellEditors. And determine if a cell is: editable or navigatable */
+  /** Entity schema for data in grid */
+  entitySchema?: EntitySchema;
+  /** Holds `formControls` for cellEditors. Also used to determine if a cell is: editable or navigatable while editing */
   formGroup?: FormGroup;
-  hasExternalAddButton?: boolean;
-  isPasting?: boolean;
+  /** */
+  routerPath?: string;
+  /** Suppress keyboard keydown event for `key`
+   * @example
+   * ```
+   * context.suppressKey = {
+   *   'Escape': (params: SuppressKeyboardEventParams)=>{
+   *     if(params.editing){
+   *       params.api.stopEditing(true)
+   *       return true;
+   *     }
+   *   }
+   * }
+   * ```
+   */
+  suppressKey?: {
+    [key: string]: (params: SuppressKeyboardEventParams) => boolean;
+  };
+  /** A function to create a new entity */
+  createFn?(data: any): any;
+  /** A function to update an entity */
+  updateFn?(id: string | number, row: any): any;
+  /** A function to delete an entity */
+  deleteFn?(id: string | number): boolean;
 }

@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 import {
   AutocompleteDatasource,
-  AutocompleteEditorParams
+  AutocompleteEditorParams,
 } from './autocomplete.models';
 
 @Injectable()
@@ -18,13 +18,13 @@ export class AutocompleteDatasourceService {
     const URL =
       'https://contracting-test-clientapi-aggrid.azurewebsites.net/client/a-anonymisert/Rows/GetRows';
     const options = {
-      headers: { Authorization: `Bearer ${localStorage.token}` }
+      headers: { Authorization: localStorage.token },
     };
     request.filterModel = request.filterModel || {};
     request.filterModel.sys_Deactivated = {
       filterType: 'text',
       filter: 'true',
-      type: 'notEqual'
+      type: 'notEqual',
     };
 
     return this.http.post(URL, request, options) as Observable<GetRowsRespons>;
@@ -63,7 +63,7 @@ export class AutocompleteRequest implements AutocompleteDatasource {
     this.cacheBlockSize = autocomplete.cacheBlockSize || 100;
     this.cols = [
       ...autocomplete.displayFields.map((field) => ({ field })),
-      { field: autocomplete.valueField }
+      { field: autocomplete.valueField },
     ];
     this.filterModel = autocomplete.filterModel || {};
     this.gridSearch = autocomplete.gridSearch;

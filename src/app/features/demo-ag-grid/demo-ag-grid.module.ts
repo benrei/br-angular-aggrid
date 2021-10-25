@@ -9,12 +9,12 @@ import { AgGridWrapperModule } from '../grid/ag-grid-wrapper/ag-grid-wrapper.mod
 @NgModule({
   imports: [
     AgGridExtentionModule,
-    AgGridToolbarModule,
     AgGridFilterPanelModule,
+    AgGridToolbarModule,
     AgGridWrapperModule,
-    CommonModule
+    CommonModule,
   ],
   declarations: [DemoGridComponent],
-  exports: [DemoGridComponent]
+  exports: [DemoGridComponent],
 })
 export class DemoAgGridModule {}
