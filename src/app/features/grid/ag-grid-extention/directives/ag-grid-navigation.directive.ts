@@ -1,4 +1,3 @@
-import { AgGridUtils } from './../utils/ag-grid.utils';
 import { Directive, OnInit } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -9,8 +8,9 @@ import {
 } from 'ag-grid-community';
 import { AgGridContext } from '../../interfaces/ag-grid-context';
 import { Keyboard } from '../enums/keyboard.enum';
+import { SuppressKeyboard } from '../utils/suppress-keyboard';
 
-/** Ag-grid navigation CW
+/** Ag-grid navigation
  *
  * Specs: https://contracting.atlassian.net/wiki/spaces/C/pages/1586397185/AG+Grid+navigation
  */
@@ -24,7 +24,7 @@ export class AgGridNavigationDirective implements OnInit {
     const { defaultColDef, gridOptions } = this.agGrid;
     this.context = this.agGrid.context || gridOptions.context;
     const defColDef = defaultColDef || gridOptions.defaultColDef;
-    defColDef.suppressKeyboardEvent = suppressKeyboardEvent;
+    defColDef.suppressKeyboardEvent = this.suppressKeyboardEvent;
     this.agGrid.tabToNextCell = this.tabToNextCell;
     this.agGrid.navigateToNextCell = this.navigateToNextCell;
   }
@@ -72,7 +72,7 @@ export class AgGridNavigationDirective implements OnInit {
   navigateToNextCell = (params: NavigateToNextCellParams): CellPosition => {
     const { event, nextCellPosition, previousCellPosition } = params;
     if (!nextCellPosition) {
-      const cols = this.agGrid.columnApi.getAllDisplayedColumns();
+      const cols = params.columnApi.getAllDisplayedColumns();
       const { column, rowIndex } = previousCellPosition;
       const nextCellPos = { column, rowIndex } as CellPosition;
       switch (event.key) {
@@ -82,7 +82,7 @@ export class AgGridNavigationDirective implements OnInit {
           nextCellPos.rowIndex = rowIndex > 0 ? rowIndex - 1 : rowIndex;
           break;
         case Keyboard.ArrowRight:
-          const lastIndex = this.agGrid.api.getLastDisplayedRow();
+          const lastIndex = params.api.getLastDisplayedRow();
           nextCellPos.column = lastIndex > rowIndex ? cols[0] : column;
           nextCellPos.rowIndex = lastIndex > rowIndex ? rowIndex + 1 : rowIndex;
           break;
@@ -91,97 +91,45 @@ export class AgGridNavigationDirective implements OnInit {
     }
     return nextCellPosition;
   };
+
+  /** Allows the user to suppress certain keyboard events in the grid cell */
+  suppressKeyboardEvent = (params: SuppressKeyboardEventParams) => {
+    // Keydown fires first and for all keys, skip other events as 'keypress'
+    if (params.event.type !== 'keydown') {
+      return false;
+    }
+    const { suppressKeyboard } = params.context as AgGridContext;
+
+    // Check context.suppressKeyboard for keys to suppress
+    const suppressKey = Object.entries(suppressKeyboard || {}).find(
+      ([key]) => key === params.event.key
+    );
+    if (suppressKey) {
+      const [_, suppressKeyboardFn] = suppressKey;
+      return suppressKeyboardFn(params);
+    }
+
+    let suppress = false;
+    switch (params.event.key) {
+      case Keyboard.ArrowUp:
+        suppress = SuppressKeyboard.arrowUp(params);
+        break;
+      case Keyboard.ArrowDown:
+        suppress = SuppressKeyboard.arrowDown(params);
+        break;
+      case Keyboard.Delete:
+        suppress = SuppressKeyboard.delete(params);
+        break;
+      case Keyboard.Enter:
+        suppress = SuppressKeyboard.enter(params);
+        break;
+      case Keyboard.Escape:
+        suppress = SuppressKeyboard.escape(params);
+        break;
+      case Keyboard.Tab:
+        suppress = SuppressKeyboard.tab(params);
+        break;
+    }
+    return suppress;
+  };
 }
-
-const suppressKeyboardEvent = (params: SuppressKeyboardEventParams) => {
-  // Keydown fires first and for all keys, skip other events as 'keypress'
-  if (params.event.type !== 'keydown') {
-    return false;
-  }
-
-  const { api, column, columnApi, colDef, context, event, node } = params;
-  const { shiftKey } = event;
-  const { deleteFn, suppressKey } = context as AgGridContext;
-  const isEditing = params.editing || api.getEditingCells().length > 0;
-
-  // Check context.suppressKey for keys to suppress
-  const extraSuppressKey = Object.entries(suppressKey || {}).find(
-    ([key]) => key === event.key
-  );
-  if (extraSuppressKey) {
-    const [_, suppressFn] = extraSuppressKey;
-    return suppressFn(params);
-  }
-
-  let suppress = false;
-  switch (event.key) {
-    case Keyboard.ArrowUp:
-      if (isEditing) {
-        api.stopEditing();
-        api.setFocusedCell(AgGridUtils.nextIndex(node.rowIndex, api), column);
-      }
-      break;
-    case Keyboard.ArrowDown:
-      if (isEditing) {
-        api.stopEditing();
-        api.setFocusedCell(AgGridUtils.prevIndex(node.rowIndex), column);
-      }
-      break;
-    case Keyboard.Delete:
-      if (!isEditing) {
-        switch (api.getModel().getType()) {
-          case 'clientSide':
-            api.applyTransaction({ remove: [node.data] });
-            break;
-        }
-        deleteFn(node.data);
-        suppress = true;
-      }
-      break;
-    case Keyboard.Enter:
-      if (isEditing) {
-        suppress = true;
-        event.preventDefault();
-        shiftKey ? api.tabToPreviousCell() : api.tabToNextCell();
-      } else {
-        if (node.isRowPinned()) suppress = true;
-      }
-      break;
-    case Keyboard.Escape:
-      suppress = true;
-      event.stopPropagation(); // Stops sidesheet from being closed
-      if (isEditing) {
-        api.stopEditing(true); // Stops edit mode even if cell/column isn't editable.
-        api.setFocusedCell(node.rowIndex, colDef.field); // Add focus after
-      } else {
-        // Master row expanded and master row selected
-        if (node.expanded) {
-          node.setExpanded(false);
-        }
-      }
-      break;
-    case Keyboard.Tab:
-      if (isEditing) {
-        suppress = true;
-        event.preventDefault();
-        shiftKey ? api.tabToPreviousCell() : api.tabToNextCell();
-      } else {
-        event.preventDefault();
-        const columns = columnApi.getAllDisplayedColumns();
-        const nextEditableColumn = shiftKey
-          ? columns.find((c) => c.isCellEditable(node))
-          : columns.find((c) => c.isCellEditable(node));
-        if (nextEditableColumn) {
-          suppress = true;
-          api.setFocusedCell(node.rowIndex, nextEditableColumn.getColId());
-          api.startEditingCell({
-            colKey: nextEditableColumn.getColId(),
-            rowIndex: node.rowIndex,
-            rowPinned: node.rowPinned,
-          });
-        }
-      }
-      break;
-  }
-  return suppress;
-};

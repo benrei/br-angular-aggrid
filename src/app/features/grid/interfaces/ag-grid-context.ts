@@ -24,7 +24,7 @@ export interface AgGridContext {
    * }
    * ```
    */
-  suppressKey?: {
+  suppressKeyboard?: {
     [key: string]: (params: SuppressKeyboardEventParams) => boolean;
   };
   /** A function to create a new entity */
